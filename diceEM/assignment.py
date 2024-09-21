@@ -1,5 +1,6 @@
 from typing import List, Union, Tuple, Optional
 import logging
+import math
 import numpy as np
 from numpy.typing import NDArray
 from cse587Autils.DiceObjects.Die import Die, safe_exponentiate
@@ -61,7 +62,7 @@ def diceEM(experiment_data: List[NDArray[np.int_]],  # pylint: disable=C0103
 
         # YOUR CODE HERE. SET REQUIRED VARIABLES BY CALLING e-step AND m-step.
         # E-step: compute the expected counts given current parameters        
-  
+        
         # M-step: update the parameters given the expected counts
       
         prev_bag_of_dice: BagOfDice = bag_of_dice
@@ -108,7 +109,20 @@ def e_step(experiment_data: List[NDArray[np.int_]],
     # counts for each type over all the draws.  
 
     # PUT YOUR CODE HERE, FOLLOWING THE DIRECTIONS ABOVE
-
+    die_one_expected_counts: list = []
+    die_two_expected_counts: list = []
+    for trial in experiment_data:
+        die_one_posterior: float = dice_posterior(trial, initial_bag)
+        die_two_posterior: float = 1 - die_one_posterior
+        die_one_expected_counts_trial: np.ndarray = np.array(np.multiply(die_one_posterior, trial))
+        die_two_expected_counts_trial: np.ndarray = np.array(np.multiply(die_two_posterior, trial))
+        die_one_expected_counts.append(die_one_expected_counts_trial)
+        die_two_expected_counts.append(die_two_expected_counts_trial)
+    # Sum to get total expected counts for each type over each of the die face values
+    die_one_counts: np.ndarray = np.array(np.sum(die_one_expected_counts, axis = 0))
+    die_two_counts: np.ndarray = np.array(np.sum(die_two_expected_counts, axis = 0))
+    # Add two arrays together
+    expected_counts: np.ndarray = np.array(die_one_counts, die_two_counts) + expected_counts
     return expected_counts
 
 
@@ -135,7 +149,7 @@ def m_step(expected_counts_by_die: NDArray[np.float_]):
     updated_type_2_frequency = np.sum(expected_counts_by_die[1])
 
     # REPLACE EACH NONE BELOW WITH YOUR CODE. 
-    updated_priors = None
+    updated_priors = 
     updated_type_1_face_probs = None
     updated_type_2_face_probs = None
     
