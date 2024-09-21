@@ -112,7 +112,7 @@ def e_step(experiment_data: List[NDArray[np.int_]],
     die_one_expected_counts: list = []
     die_two_expected_counts: list = []
     for trial in experiment_data:
-        die_one_posterior: float = dice_posterior(trial, initial_bag)
+        die_one_posterior: float = dice_posterior(trial, bag_of_dice)
         die_two_posterior: float = 1 - die_one_posterior
         die_one_expected_counts_trial: np.ndarray = np.array(np.multiply(die_one_posterior, trial))
         die_two_expected_counts_trial: np.ndarray = np.array(np.multiply(die_two_posterior, trial))
@@ -122,7 +122,7 @@ def e_step(experiment_data: List[NDArray[np.int_]],
     die_one_counts: np.ndarray = np.array(np.sum(die_one_expected_counts, axis = 0))
     die_two_counts: np.ndarray = np.array(np.sum(die_two_expected_counts, axis = 0))
     # Add two arrays together
-    expected_counts: np.ndarray = np.array(die_one_counts, die_two_counts) + expected_counts
+    expected_counts: np.ndarray = np.array([die_one_counts, die_two_counts]) + expected_counts
     return expected_counts
 
 
@@ -149,7 +149,7 @@ def m_step(expected_counts_by_die: NDArray[np.float_]):
     updated_type_2_frequency = np.sum(expected_counts_by_die[1])
 
     # REPLACE EACH NONE BELOW WITH YOUR CODE. 
-    updated_priors = 
+    updated_priors = None
     updated_type_1_face_probs = None
     updated_type_2_face_probs = None
     
